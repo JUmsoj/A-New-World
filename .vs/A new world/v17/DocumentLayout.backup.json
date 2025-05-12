@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\sadat\\OneDrive\\Documents\\a-new-world\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{339D762F-3E2C-4319-A7AE-9EF24597A3CB}|A new world.csproj|c:\\users\\sadat\\onedrive\\documents\\a-new-world\\resources.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{339D762F-3E2C-4319-A7AE-9EF24597A3CB}|A new world.csproj|solutionrelative:resources.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{339D762F-3E2C-4319-A7AE-9EF24597A3CB}|A new world.csproj|c:\\users\\sadat\\onedrive\\documents\\a-new-world\\manager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{339D762F-3E2C-4319-A7AE-9EF24597A3CB}|A new world.csproj|solutionrelative:manager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{339D762F-3E2C-4319-A7AE-9EF24597A3CB}|A new world.csproj|c:\\users\\sadat\\onedrive\\documents\\a-new-world\\tile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{339D762F-3E2C-4319-A7AE-9EF24597A3CB}|A new world.csproj|solutionrelative:tile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{339D762F-3E2C-4319-A7AE-9EF24597A3CB}|A new world.csproj|c:\\users\\sadat\\onedrive\\documents\\a-new-world\\resource.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{339D762F-3E2C-4319-A7AE-9EF24597A3CB}|A new world.csproj|solutionrelative:resource.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{339D762F-3E2C-4319-A7AE-9EF24597A3CB}|A new world.csproj|c:\\users\\sadat\\onedrive\\documents\\a-new-world\\resources.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{339D762F-3E2C-4319-A7AE-9EF24597A3CB}|A new world.csproj|solutionrelative:resources.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{339D762F-3E2C-4319-A7AE-9EF24597A3CB}|A new world.csproj|c:\\users\\sadat\\onedrive\\documents\\a-new-world\\manager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{339D762F-3E2C-4319-A7AE-9EF24597A3CB}|A new world.csproj|solutionrelative:manager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,56 +26,56 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "Resource.cs",
               "DocumentMoniker": "C:\\Users\\sadat\\OneDrive\\Documents\\a-new-world\\Resource.cs",
               "RelativeDocumentMoniker": "Resource.cs",
               "ToolTip": "C:\\Users\\sadat\\OneDrive\\Documents\\a-new-world\\Resource.cs",
               "RelativeToolTip": "Resource.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAXAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-26T00:57:23.467Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "Tile.cs",
               "DocumentMoniker": "C:\\Users\\sadat\\OneDrive\\Documents\\a-new-world\\Tile.cs",
               "RelativeDocumentMoniker": "Tile.cs",
               "ToolTip": "C:\\Users\\sadat\\OneDrive\\Documents\\a-new-world\\Tile.cs",
               "RelativeToolTip": "Tile.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAQwBAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-26T00:37:00.277Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "Manager.cs",
               "DocumentMoniker": "C:\\Users\\sadat\\OneDrive\\Documents\\a-new-world\\Manager.cs",
               "RelativeDocumentMoniker": "Manager.cs",
               "ToolTip": "C:\\Users\\sadat\\OneDrive\\Documents\\a-new-world\\Manager.cs",
               "RelativeToolTip": "Manager.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAkAAAAhAAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAkwBYAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-26T00:07:22.737Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Resources.cs",
               "DocumentMoniker": "C:\\Users\\sadat\\OneDrive\\Documents\\a-new-world\\Resources.cs",
               "RelativeDocumentMoniker": "Resources.cs",
               "ToolTip": "C:\\Users\\sadat\\OneDrive\\Documents\\a-new-world\\Resources.cs",
               "RelativeToolTip": "Resources.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAYwAoAAAA6AAAAAAAAAA==",
+              "ViewState": "AgIAABMAAAAAAAAAAAAQwAEAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-25T23:46:45.434Z",
               "EditorCaption": ""

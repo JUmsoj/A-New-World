@@ -3,26 +3,33 @@ using System;
 
 public partial class Tile : Button
 {
+    public int TotalBalance;
     [Export] Timer daytimer;
     public static Resource selected;
     private Resource TileResource;
     bool activated;
     public bool confirmed { get; set; }
-    int time = 1;
+    private int timeToEstablish = 1;
     void Establish()
     {
+        
         TileResource = selected;
-        daytimer.Timeout += () => GetNode<Resources>("../").Produce(5, TileResource.type);
+
+        daytimer.Timeout += TileResource.Produce;
         GD.Print($"{Name} has been established");
 
         confirmed = true;
     }
     void BuildForOneDay()
     {
-        time--;
-        if (time <= 0)
+        if (!confirmed)
         {
-            Establish();
+            timeToEstablish--;
+            GD.Print($"{Name} has been built for one day");
+            if (timeToEstablish <= 0)
+            {
+                Establish();
+            }
         }
     }
     public void OnButtonPress(bool toggle)
@@ -32,10 +39,11 @@ public partial class Tile : Button
     }
     void OnConfirm()
     {
-        if (activated)
+        if (activated && selected.Pay() == 0)
         {
             GD.Print($"{selected.type} is confirmed as {Name}'s resource");
-            time = 5;
+            
+            timeToEstablish = 5;
            daytimer.Timeout += BuildForOneDay;
         }
     }

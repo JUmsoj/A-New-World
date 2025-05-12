@@ -63,6 +63,9 @@ offset_bottom = 169.0
 layout_mode = 1
 offset_right = 50.0
 offset_bottom = 50.0
+cost = Dictionary[String, int]({
+"gun": 10
+})
 metadata/res = "gun"
 
 [node name="Confirm" type="Button" parent="GameScene"]

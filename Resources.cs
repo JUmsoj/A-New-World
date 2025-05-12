@@ -5,8 +5,8 @@ using System;
 public partial class Resources : Control
 {
     public Dictionary<string, Resource> Production;
-
-    T FindCompatibleResource<T>(string type, string Path) where T : Node
+    public static string root;
+    public T FindCompatibleResource<T>(string type, string Path) where T : Node
     {
        
         foreach (var child in GetNode(Path).GetChildren())
@@ -26,7 +26,8 @@ public partial class Resources : Control
     }
     public override void _Ready()
     {
-        Production = new Dictionary<string, Resource>();
+        root = GetPath();
+        Production = [];
         foreach (var child in GetNode<Control>("ResourceTypes").GetChildren())
         {
              GD.Print((child as Resource).type);
@@ -34,11 +35,29 @@ public partial class Resources : Control
         }
         
     }
+    public override void _Process(double delta)
+    {
+       // add code for show settings here 
+    }
+    void ShowSettings()
+    {
+        // add code for a menu including the following items:
+        /*
+        Upkeep cost
+        Whether it was public or private
+        what this land produces and how much this produces daily
+        The amount of colonists working on it(is a factor in the production rate
+        a button to disable & enable it(temporarily reducing upkeep and freezing production)
+        a button to demolish it (destroys it completely)
+        etc..
+        */
+    }
+    
     public void Produce(int amount, string type)
     {
         Label label = Production[type].label;
         Production[type].amount += amount;
-        label.Text = $"{type} : {amount}";
+        label.Text = $"{type} : {Production[type].amount}";
         
     }
 }
