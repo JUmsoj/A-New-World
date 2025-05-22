@@ -18,32 +18,7 @@ public partial class Resource : Button
         cost = [];
         type = (string)GetMeta("res");
     }
-    void OnPress()
-    {
-        Tile.selected = this;
-    }
-    public int Pay()
-    {
-        GD.Print($"{type}'s cost is being paid for a construction project");
-        parent ??= (GetNode<Control>(Resources.root) as Resources);
-       
-        foreach (var pair in cost)
-        {
-            if (parent.Production[pair.Key].amount >= pair.Value)
-            {
-                parent.Produce(-1 * pair.Value, pair.Key);
-
-            }
-            else
-            {
-                foreach(var pai in cost) 
-                parent.Produce(pai.Value, pai.Key); // replace this refund functions with a function that removes pounds from the balance
-                GD.Print($"A production facility that produces {type} has failed to build");
-                return -1;
-            }
-        }
-        return 0;
-    }
+    
     public void Register(Label label, Dictionary<string, Resource> dict)
     {
         try
@@ -63,6 +38,13 @@ public partial class Resource : Button
         amount += productionRate;
         GD.Print($"Added {amount} to {type}");
         label.Text = $"{type}: {amount}";
+    }
+    public void Produce(int amount)
+    {
+        this.amount += amount;
+        GD.Print($"Added {amount} to {type}");
+        label.Text = $"{type}: {amount}";
+
     }
     private void Deselect()
     {

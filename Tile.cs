@@ -3,19 +3,19 @@ using System;
 
 public partial class Tile : Button
 {
+    private Resources resources;
     public int TotalBalance;
     [Export] Timer daytimer;
-    public static Resource selected;
-    private Resource TileResource;
+    public static constructionProject selected;
+    private constructionProject TileResource;
     bool activated;
     public bool confirmed { get; set; }
     private int timeToEstablish = 1;
     void Establish()
     {
-        
-        TileResource = selected;
 
-        daytimer.Timeout += TileResource.Produce;
+
+        daytimer.Timeout += TileResource.Operate;
         GD.Print($"{Name} has been established");
 
         confirmed = true;
@@ -35,15 +35,17 @@ public partial class Tile : Button
     public void OnButtonPress(bool toggle)
     {
         activated = toggle;
-        if(selected != null) GD.Print(activated ? $"{selected.type} is selected as {Name}'s resource" : $"{selected.type} is deselected as {Name}'s resource");
+        if(selected != null) GD.Print(activated ? $"{selected.name} is selected as {Name}'s resource" : $"{selected.name} is deselected as {Name}'s resource");
     }
+    
     void OnConfirm()
     {
-        if (activated && selected.Pay() == 0)
+        TileResource = selected;
+        if (activated && selected.InvestResources() == 0)
         {
-            GD.Print($"{selected.type} is confirmed as {Name}'s resource");
+            GD.Print($"{selected.name} is confirmed as {Name}'s resource");
             
-            timeToEstablish = 5;
+            timeToEstablish = selected.timeToProduce;
            daytimer.Timeout += BuildForOneDay;
         }
     }

@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://b4lqmtmp4e8bu" path="res://Tile.cs" id="1_y4sij"]
 
 [node name="Button" type="Button"]
+custom_minimum_size = Vector2(50, 50)
 offset_right = 8.0
 offset_bottom = 8.0
 script = ExtResource("1_y4sij")

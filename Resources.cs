@@ -4,6 +4,9 @@ using System;
 
 public partial class Resources : Control
 {
+    public static Resources Base;
+    public int balance { get; set; }
+    [Export] public Label balanceIndicator;
     public Dictionary<string, Resource> Production;
     public static string root;
     public T FindCompatibleResource<T>(string type, string Path) where T : Node
@@ -26,9 +29,10 @@ public partial class Resources : Control
     }
     public override void _Ready()
     {
+        Base = this;
         root = GetPath();
         Production = [];
-        foreach (var child in GetNode<Control>("ResourceTypes").GetChildren())
+        foreach (var child in GetNode<Control>("../ResourceTypes").GetChildren())
         {
              GD.Print((child as Resource).type);
              (child as Resource).Register(FindCompatibleResource<Label>(((Resource)child).type , "Labels2"), Production);
