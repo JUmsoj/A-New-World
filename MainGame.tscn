@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://btby5o23c5uao"]
+[gd_scene load_steps=6 format=3 uid="uid://btby5o23c5uao"]
 
 [ext_resource type="Script" uid="uid://8hn7m3fyffqx" path="res://Manager.cs" id="1_3tbxw"]
 [ext_resource type="PackedScene" uid="uid://dcvr6atub00ea" path="res://Resources.tscn" id="2_e3m3f"]
 [ext_resource type="PackedScene" uid="uid://0okdg05fs8iy" path="res://Square.tscn" id="3_bqqt8"]
 [ext_resource type="PackedScene" uid="uid://kgkh5flr7fjc" path="res://Resource.tscn" id="4_8qpgq"]
+[ext_resource type="Script" uid="uid://dm25443v8ub6q" path="res://Resource.cs" id="5_8qpgq"]
 
 [node name="Node" type="Node"]
 script = ExtResource("1_3tbxw")
@@ -43,7 +44,7 @@ offset_bottom = 385.0
 layout_mode = 2
 metadata/res = "gun"
 
-[node name="ResourceTypes" type="HBoxContainer" parent="GameScene"]
+[node name="ProjectTypes" type="HBoxContainer" parent="GameScene"]
 clip_contents = true
 custom_minimum_size = Vector2(50, 50)
 layout_direction = 2
@@ -53,10 +54,14 @@ offset_right = 1151.0
 offset_bottom = 91.0
 alignment = 1
 
-[node name="GunFactory2" parent="GameScene/ResourceTypes" instance=ExtResource("4_8qpgq")]
+[node name="GunFactory2" parent="GameScene/ProjectTypes" instance=ExtResource("4_8qpgq")]
 layout_mode = 2
 text = "GUN FACTORY"
-cost = Dictionary[String, int]({
+name = "gunFactory"
+Cost = Dictionary[String, int]({
+"gun": 0
+})
+Produce = Dictionary[String, int]({
 "gun": 10
 })
 metadata/res = "gun"
@@ -69,8 +74,12 @@ offset_right = 775.0
 offset_bottom = 643.0
 text = "CONFIRM"
 
-[node name="ResourceTypes" type="Node" parent="."]
+[node name="ResourceTypes" type="Node" parent="GameScene"]
 
-[connection signal="Deselect" from="." to="GameScene/ResourceTypes/GunFactory2" method="Deselect"]
+[node name="GunType" type="Node" parent="GameScene/ResourceTypes"]
+script = ExtResource("5_8qpgq")
+metadata/res = "gun"
+
 [connection signal="toggled" from="GameScene/Lands/Button" to="GameScene/Lands/Button" method="OnButtonPress"]
+[connection signal="pressed" from="GameScene/ProjectTypes/GunFactory2" to="GameScene/ProjectTypes/GunFactory2" method="OnClick"]
 [connection signal="pressed" from="GameScene/Confirm" to="GameScene/Lands/Button" method="OnConfirm"]

@@ -5,7 +5,7 @@ using System;
 public partial class Resources : Control
 {
     public static Resources Base;
-    public int balance { get; set; }
+    [Export] public int Balance { get; set; }
     [Export] public Label balanceIndicator;
     public Dictionary<string, Resource> Production;
     public static string root;
@@ -31,37 +31,21 @@ public partial class Resources : Control
     {
         Base = this;
         root = GetPath();
-        Production = [];
-        foreach (var child in GetNode<Control>("../ResourceTypes").GetChildren())
+        Production = new Dictionary<string, Resource>();
+        
+        foreach (var child in GetNode<Node>("ResourceTypes").GetChildren())
         {
-             GD.Print((child as Resource).type);
-             (child as Resource).Register(FindCompatibleResource<Label>(((Resource)child).type , "Labels2"), Production);
+             GD.Print("The main loop has detected" + (child as Resource).type + "As one of the Resources");
+             (child as Resource).Register(FindCompatibleResource<Label>(((Resource)child).type , "Labels"), ref Production);
         }
         
     }
-    public override void _Process(double delta)
-    {
-       // add code for show settings here 
-    }
-    void ShowSettings()
-    {
-        // add code for a menu including the following items:
-        /*
-        Upkeep cost
-        Whether it was public or private
-        what this land produces and how much this produces daily
-        The amount of colonists working on it(is a factor in the production rate
-        a button to disable & enable it(temporarily reducing upkeep and freezing production)
-        a button to demolish it (destroys it completely)
-        etc..
-        */
-    }
+   
     
     public void Produce(int amount, string type)
     {
         Label label = Production[type].label;
         Production[type].amount += amount;
         label.Text = $"{type} : {Production[type].amount}";
-        
     }
 }

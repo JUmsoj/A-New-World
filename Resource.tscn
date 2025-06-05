@@ -1,10 +1,10 @@
 [gd_scene load_steps=2 format=3 uid="uid://kgkh5flr7fjc"]
 
-[ext_resource type="Script" uid="uid://dm25443v8ub6q" path="res://Resource.cs" id="1_xp63l"]
+[ext_resource type="Script" uid="uid://cjj1l28m56qnm" path="res://constructionProject.cs" id="1_xp63l"]
 
 [node name="Button" type="Button"]
-offset_right = 62.0
-offset_bottom = 85.0
+offset_right = 112.0
+offset_bottom = 51.0
 script = ExtResource("1_xp63l")
 metadata/res = ""
 

@@ -7,7 +7,6 @@ public partial class Manager : Node
 
     [Signal] 
     public delegate void DayPassedEventHandler(int days);
-    [Signal] public delegate void DeselectEventHandler();
     public override void _Ready()
     {
         GetNode<Timer>("DayTimer").Timeout += () =>
@@ -20,7 +19,7 @@ public partial class Manager : Node
     {
         if (Input.IsActionJustPressed("Deselect All Resources"))
         {
-            EmitSignal(SignalName.Deselect);
+            Tile.selected = null;
         }
     }
 }
