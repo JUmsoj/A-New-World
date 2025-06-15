@@ -9,43 +9,76 @@ public partial class Resources : Control
     [Export] public Label balanceIndicator;
     public Dictionary<string, Resource> Production;
     public static string root;
+    /// <summary>
+    /// subtracts or simulates the subtraction from the balance by the amount  specified in the amount paramater, and returns true or false depending on if 
+    /// you can afford the loss (does it go negative when you subtract it). However, if purchaseAuto is false, it doesn't actually subtract.
+    /// </summary>
+
+    public bool SpendPounds(int amount, bool PurchaseAuto = true)
+    {
+        if (Balance < amount) return false;
+        else
+        {
+            if (PurchaseAuto)
+            {
+                Balance -= amount;
+                balanceIndicator.Text = $"Balance: {Balance}";
+            }
+            return true;
+            
+        }
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="type"></param>
+    /// <param name="Path"></param>
+    /// <returns></returns>
     public T FindCompatibleResource<T>(string type, string Path) where T : Node
     {
-       
+      
         foreach (var child in GetNode(Path).GetChildren())
         {
-            GD.Print("Loop Went Through");
-            if (child.GetType() == typeof(T) && ((string)child.GetMeta("res")) == type)
+            string ChildType = (string)child.GetMeta("res");
+            // GD.Print("Loop Went Through");
+            if (child is T && ChildType == type)
             {
-                GD.Print("Child matches type");
+               // GD.Print("Child matches type");
                 
                 return child as T;
 
             }
         }
-        GD.Print("Returned Null");
+        // GD.Print("Returned Null");
 
         return null;
     }
     public override void _Ready()
     {
+
+        Balance = 1000;
+        balanceIndicator.Text = $"Balance: {Balance}";
+        var daysLabel = GetNode<Label>("DaysLabel");
+        (GetParent() as Manager).DayPassed += (int days) =>
+        {
+            daysLabel.Text = $"Current Day : {days}";
+        };
         Base = this;
         root = GetPath();
-        Production = new Dictionary<string, Resource>();
+        Production = [];
         
         foreach (var child in GetNode<Node>("ResourceTypes").GetChildren())
         {
-             GD.Print("The main loop has detected" + (child as Resource).type + "As one of the Resources");
-             (child as Resource).Register(FindCompatibleResource<Label>(((Resource)child).type , "Labels"), ref Production);
+            Resource ChildResource = child as Resource;
+            string childType = ChildResource.type;
+
+            // GD.Print("The main loop has detected" + (child as Resource).type + "As one of the Resources");
+             ChildResource.Register(FindCompatibleResource<Label>(childType , "Labels"), ref Production);
         }
         
     }
    
     
-    public void Produce(int amount, string type)
-    {
-        Label label = Production[type].label;
-        Production[type].amount += amount;
-        label.Text = $"{type} : {Production[type].amount}";
-    }
+   
 }

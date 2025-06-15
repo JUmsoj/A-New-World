@@ -1,71 +1,77 @@
 using Godot;
 using System;
 using Godot.Collections;
-
+using System.Reflection.Metadata.Ecma335;
+// Resources cannot be produced directly, a blueprint for a 
+// facility that produces said resource must be built
+// the class for it is defined below
 public partial class constructionProject : Button
 {
+    
     [Export] public string name { get; set; }
     [Export] public Dictionary<string, int> Cost, Produce;
     [Export] public int timeToProduce;
-    private bool isSettingsShown = false;
-    public void Operate()
+   
+    
+
+   
+    // simulates one operating day of a given facility that follows this blueprint
+    // will update the stats accordingly
+    public void Operate(Tile tile)
     {
+        // update tileStats variables below:
+        tile.tileRunning++;
+        // edit it on labels below:
+        tile.tileStats["totalTimeRunning"].Text = $"Total Time Running: {tile.tileRunning}";
+        //  changes the amounts  of the products that will be produced this day. including pounds
         foreach(var (resource, amount) in Produce)
         {
+            int newAmount = tile.multiplier != 0 ? tile.multiplier * amount : amount;
+            // if it isnt pounds use the regular Produce() function that uses
+            // the dictionary Production to get the Resources and Labels
             if (resource != "balance")
             {
-                Resources.Base.Production[resource].Produce(amount);
-                GD.Print($"A tile of {name} has succesfully fufilled resource expectations for the day");
+                Resources.Base.Production[resource].Produce(newAmount);
+                GD.Print($"A tile of {tile.Name} has succesfully fufilled resource expectations for the day");
             }
+            // uniquely handles pounds with the SpendPounds function
             else
             {
-                Resources.Base.Balance += amount;
+                Resources.Base.SpendPounds(-newAmount);
             }
         }
     }
-    public override void _Process(double delta)
-    {
-        if (IsHovered() && Input.IsActionJustPressed("showTileInfo"))
-        {
-            isSettingsShown = !isSettingsShown;
-            ShowSettings();
-        }
-    }
-    private void ShowSettings()
-    {
-        if(isSettingsShown)
-        {
-
-        }
-    }
+    
     public int InvestResources()
     {
-        
+        // creates the necessary references to dictionary 
         ref Dictionary<string, Resource> Production  = ref Resources.Base.Production;
         GD.Print($"{name}'s cost is being paid for a construction project");
         
-        int temp = 0;
+       
+        // loops through the Cost dictionary
         foreach(var (resource, amt) in Cost)
         {
-            temp++;
+           
+            // if the resource isnt pounds; use the Production dictionary.
             if (resource != "balance")
             {
+                // if there is even one type of resource that the total supply doesnt meet
+                // the construction costs, it will be scrapped entirely
                 if (Production[resource].amount < amt)
                 {
                     
                         GD.Print($"Cannot afford {name}");
                         return -1;
                 }
-                else if (temp == Cost.Count)
-                {
-                    
-                        GD.Print($"Can afford {name}");
-                        break;
-                }
+                // if it is the final iteration, it will go through to the next one;
+                continue;
             }
+            // if it is balance, use the SpendPounds function to 
+            // get the variable and perform the necssary updates on the Labels
             else
             {
-                if (Resources.Base.Balance < amt)
+                if (!Resources.Base.SpendPounds(amt, false))
                 {
                     GD.Print($"Cannot afford {name}");
                     return -1;
@@ -73,19 +79,26 @@ public partial class constructionProject : Button
                 else continue;
             }
         }
+        // it invests the respective resources into the project,
+        // depleting them from the total supply
     
-        foreach (var (resource, amount) in Cost)
+        foreach (var (resource, cost) in Cost)
         {
-            Production[resource].Produce(-amount);
+            if (resource != "balance") Production[resource].ChangeSupply(ResourceActions.Spend, cost);
+            else Resources.Base.SpendPounds(cost);
+            
         }
+        GD.Print($"Succesfully invested resources in {name}");
         return 0;
 
 
       
       
     }
+    // self explanatory
     public void OnClick()
     {
         Tile.selected = this;
+        GD.Print($"{Name} has been clicked and selected");
     }
 }
