@@ -1,6 +1,8 @@
 using Godot;
 using Godot.Collections;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 public partial class Resources : Control
 {
@@ -9,11 +11,19 @@ public partial class Resources : Control
     [Export] public Label balanceIndicator;
     public Dictionary<string, Resource> Production;
     public static string root;
+    public Dictionary<string, constructionProject> availableProjects { get; set; }
     /// <summary>
     /// subtracts or simulates the subtraction from the balance by the amount  specified in the amount paramater, and returns true or false depending on if 
     /// you can afford the loss (does it go negative when you subtract it). However, if purchaseAuto is false, it doesn't actually subtract.
     /// </summary>
 
+    public static IEnumerable findTypeInList<T>(List<object> list)
+    {
+        foreach(var item in list)
+        {
+            if(item is T) yield return item;
+        }
+    }
     public bool SpendPounds(int amount, bool PurchaseAuto = true)
     {
         if (Balance < amount) return false;
@@ -75,6 +85,11 @@ public partial class Resources : Control
 
             // GD.Print("The main loop has detected" + (child as Resource).type + "As one of the Resources");
              ChildResource.Register(FindCompatibleResource<Label>(childType , "Labels"), ref Production);
+        }
+        foreach(var child in GetNode<Node>("constructionProjects").GetChildren())
+        {
+            constructionProject Project = child as constructionProject;
+            availableProjects[Project.name] = Project;
         }
         
     }
