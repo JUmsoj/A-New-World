@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bdbd4pf24fxmr"]
+
+[node name="GunLabel" type="Label"]
+offset_right = 1.0
+offset_bottom = 23.0
+metadata/res = "gun"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]

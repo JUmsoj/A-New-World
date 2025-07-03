@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://btby5o23c5uao"]
+[gd_scene load_steps=7 format=3 uid="uid://btby5o23c5uao"]
 
 [ext_resource type="Script" uid="uid://8hn7m3fyffqx" path="res://Manager.cs" id="1_3tbxw"]
 [ext_resource type="PackedScene" uid="uid://dcvr6atub00ea" path="res://Resources.tscn" id="2_e3m3f"]
 [ext_resource type="PackedScene" uid="uid://0okdg05fs8iy" path="res://Square.tscn" id="3_bqqt8"]
-[ext_resource type="PackedScene" uid="uid://kgkh5flr7fjc" path="res://Resource.tscn" id="4_8qpgq"]
+[ext_resource type="PackedScene" uid="uid://kgkh5flr7fjc" path="res://constructionProject.tscn" id="4_8qpgq"]
+[ext_resource type="PackedScene" uid="uid://bdbd4pf24fxmr" path="res://gun_label.tscn" id="4_pv6b4"]
 [ext_resource type="Script" uid="uid://dm25443v8ub6q" path="res://Resource.cs" id="5_8qpgq"]
 
 [node name="Node" type="Node"]
@@ -33,7 +34,7 @@ grow_horizontal = 0
 grow_vertical = 0
 columns = 2
 
-[node name="Button" parent="GameScene/Lands" node_paths=PackedStringArray("daytimer") instance=ExtResource("3_bqqt8")]
+[node name="Button" parent="GameScene/Lands" node_paths=PackedStringArray("daytimer") groups=["CurrentSelection", "States"] instance=ExtResource("3_bqqt8")]
 layout_mode = 2
 toggle_mode = true
 daytimer = NodePath("../../../DayTimer")
@@ -49,9 +50,8 @@ offset_top = 92.0
 offset_right = 210.0
 offset_bottom = 385.0
 
-[node name="GunLabel" type="Label" parent="GameScene/Labels"]
+[node name="GunLabel" parent="GameScene/Labels" instance=ExtResource("4_pv6b4")]
 layout_mode = 2
-metadata/res = "gun"
 
 [node name="ProjectTypes" type="HBoxContainer" parent="GameScene"]
 custom_minimum_size = Vector2(100, 50)
@@ -72,12 +72,13 @@ layout_mode = 2
 text = "GUN FACTORY"
 name = "gunFactory"
 Cost = Dictionary[String, int]({
-"balance": 1001,
+"balance": 250,
 "gun": 0
 })
 Produce = Dictionary[String, int]({
 "gun": 10
 })
+timeToProduce = 2
 metadata/res = "gun"
 
 [node name="Confirm" type="Button" parent="GameScene"]
@@ -120,6 +121,7 @@ autostart = true
 
 [connection signal="toggled" from="GameScene/Lands/Button" to="GameScene/Lands/Button" method="OnButtonPress"]
 [connection signal="pressed" from="GameScene/ProjectTypes/GunFactory2" to="GameScene/ProjectTypes/GunFactory2" method="OnClick"]
+[connection signal="pressed" from="GameScene/Confirm" to="GameScene" method="OnConfirm"]
 [connection signal="pressed" from="GameScene/Confirm" to="GameScene/Lands/Button" method="OnConfirm"]
 [connection signal="timeout" from="loadingTimer" to="GameScene/Lands/Button" method="setUpStats"]
 

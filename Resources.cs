@@ -7,11 +7,12 @@ using System.Collections.Generic;
 public partial class Resources : Control
 {
     public static Resources Base;
+    
     [Export] public int Balance { get; set; }
     [Export] public Label balanceIndicator;
-    public Dictionary<string, Resource> Production;
+    public Godot.Collections.Dictionary<string, Resource> Production;
     public static string root;
-    public Dictionary<string, constructionProject> availableProjects { get; set; }
+    public Godot.Collections.Dictionary<string, constructionProject> availableProjects { get; set; }
     /// <summary>
     /// subtracts or simulates the subtraction from the balance by the amount  specified in the amount paramater, and returns true or false depending on if 
     /// you can afford the loss (does it go negative when you subtract it). However, if purchaseAuto is false, it doesn't actually subtract.
@@ -77,7 +78,7 @@ public partial class Resources : Control
         Base = this;
         root = GetPath();
         Production = [];
-        
+        availableProjects = [];
         foreach (var child in GetNode<Node>("ResourceTypes").GetChildren())
         {
             Resource ChildResource = child as Resource;
@@ -86,14 +87,14 @@ public partial class Resources : Control
             // GD.Print("The main loop has detected" + (child as Resource).type + "As one of the Resources");
              ChildResource.Register(FindCompatibleResource<Label>(childType , "Labels"), ref Production);
         }
-        foreach(var child in GetNode<Node>("constructionProjects").GetChildren())
+        foreach(var child in GetNode<Node>("ProjectTypes").GetChildren())
         {
             constructionProject Project = child as constructionProject;
             availableProjects[Project.name] = Project;
         }
         
     }
-   
+    public void OnConfirm() => GetTree().CallGroup("States", "OnConfirm");
     
    
 }

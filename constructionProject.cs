@@ -11,7 +11,7 @@ public partial class constructionProject : Button
     [Export] public string name { get; set; }
     [Export] public Dictionary<string, int> Cost, Produce;
     [Export] public int timeToProduce;
-   
+    public Dictionary<string, int> Territories { get; set; }
     
 
    
@@ -22,26 +22,33 @@ public partial class constructionProject : Button
         // update tileStats variables below:
         tile.tileRunning++;
         // edit it on labels below:
+        
         tile.tileStats["totalTimeRunning"].Text = $"Total Time Running: {tile.tileRunning}";
-        //  changes the amounts  of the products that will be produced this day. including pounds
-        foreach(var (resource, amount) in Produce)
+        if (Territories[tile.Name] != 0)
         {
-            int newAmount = tile.multiplier != 0 ? tile.multiplier * amount : amount;
-            // if it isnt pounds use the regular Produce() function that uses
-            // the dictionary Production to get the Resources and Labels
-            if (resource != "balance")
+            //  changes the amounts  of the products that will be produced this day. including pounds
+            foreach (var (resource, amount) in Produce)
             {
-                Resources.Base.Production[resource].Produce(newAmount);
-                GD.Print($"A tile of {tile.Name} has succesfully fufilled resource expectations for the day");
-            }
-            // uniquely handles pounds with the SpendPounds function
-            else
-            {
-                Resources.Base.SpendPounds(-newAmount);
+                int newAmount = tile.multiplier != 0 ? tile.multiplier * amount : amount;
+                // if it isnt pounds use the regular Produce() function that uses
+                // the dictionary Production to get the Resources and Labels
+                if (resource != "balance")
+                {
+                    Resources.Base.Production[resource].Produce(newAmount);
+                    GD.Print($"A tile of {tile.Name} has succesfully fufilled resource expectations for the day");
+                }
+                // uniquely handles pounds with the SpendPounds function
+                else
+                {
+                    Resources.Base.SpendPounds(-newAmount);
+                }
             }
         }
     }
-    
+    public override void _Ready()
+    {
+        Territories = [];
+    }
     public int InvestResources()
     {
         // creates the necessary references to dictionary 

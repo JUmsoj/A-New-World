@@ -9,10 +9,17 @@ offset_bottom = 8.0
 script = ExtResource("1_y4sij")
 
 [node name="tileStats" type="VBoxContainer" parent="."]
-visible = false
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 5.0
+offset_top = 1.0
+offset_right = 45.0
+offset_bottom = 51.0
 
 [node name="totalTimeRunning" type="Label" parent="tileStats"]
 layout_mode = 2
+
+[node name="buildingAmount" type="Label" parent="tileStats"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]

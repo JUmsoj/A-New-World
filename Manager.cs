@@ -7,6 +7,19 @@ public partial class Manager : Node
 
     [Signal] 
     public delegate void DayPassedEventHandler(int days);
+    public Control SelectedInterface { get; set; }
+    public bool bulldozingMode { get; set; }
+    public override void _Input(InputEvent @event)
+    {
+        if (@event is InputEventKey)
+        {
+            InputEventKey KeyPressed = @event as InputEventKey;
+            if(KeyPressed.Keycode == Key.Space)
+            {
+                Tile.selected = null;
+            }
+        }
+    }
     public override void _Ready()
     {
         GetNode<Timer>("DayTimer").Timeout += () =>
@@ -15,11 +28,10 @@ public partial class Manager : Node
             EmitSignal(SignalName.DayPassed, days);
         };
     }
-    public override void _Process(double delta)
+    
+    public void setInterface(Control selectedInterface)
     {
-        if (Input.IsActionJustPressed("Deselect All Resources"))
-        {
-            Tile.selected = null;
-        }
+        SelectedInterface.Visible = false;
+        selectedInterface.Visible = true;
     }
 }

@@ -19,6 +19,10 @@ config/icon="res://icon.svg"
 
 project/assembly_name="A new world"
 
+[global_group]
+
+CurrentSelection=""
+
 [input]
 
 "Deselect All Resources"={
