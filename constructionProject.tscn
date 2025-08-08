@@ -6,6 +6,5 @@
 offset_right = 112.0
 offset_bottom = 51.0
 script = ExtResource("1_xp63l")
-metadata/res = ""
 
 [connection signal="pressed" from="." to="." method="OnPress"]

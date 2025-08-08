@@ -1,0 +1,65 @@
+[gd_scene load_steps=2 format=3 uid="uid://blevoqso01kp8"]
+
+[ext_resource type="PackedScene" uid="uid://0okdg05fs8iy" path="res://Square.tscn" id="1_82epm"]
+
+[node name="Lands" type="GridContainer"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -225.0
+offset_top = -211.0
+grow_horizontal = 0
+grow_vertical = 0
+columns = 2
+
+[node name="Button" parent="." groups=["States"] instance=ExtResource("1_82epm")]
+layout_mode = 2
+toggle_mode = true
+maxBuildings = 5
+Population = 100
+activated = true
+
+[node name="totalTimeRunning" parent="Button/tileStats" index="0"]
+visible = false
+
+[node name="Button2" parent="." instance=ExtResource("1_82epm")]
+layout_mode = 2
+
+[node name="Button3" parent="." instance=ExtResource("1_82epm")]
+layout_mode = 2
+
+[node name="Button4" parent="." instance=ExtResource("1_82epm")]
+layout_mode = 2
+
+[node name="Button5" parent="." instance=ExtResource("1_82epm")]
+layout_mode = 2
+
+[node name="Button6" parent="." instance=ExtResource("1_82epm")]
+layout_mode = 2
+
+[node name="Button7" parent="." instance=ExtResource("1_82epm")]
+layout_mode = 2
+
+[node name="Button8" parent="." instance=ExtResource("1_82epm")]
+layout_mode = 2
+
+[node name="Button9" parent="." instance=ExtResource("1_82epm")]
+layout_mode = 2
+
+[node name="Button10" parent="." instance=ExtResource("1_82epm")]
+layout_mode = 2
+
+[node name="Button11" parent="." instance=ExtResource("1_82epm")]
+layout_mode = 2
+
+[node name="Button12" parent="." instance=ExtResource("1_82epm")]
+layout_mode = 2
+
+[node name="Button13" parent="." instance=ExtResource("1_82epm")]
+layout_mode = 2
+
+[connection signal="toggled" from="Button" to="Button" method="OnButtonPress"]
+
+[editable path="Button"]

@@ -23,8 +23,8 @@ public partial class constructionProject : Button
         tile.tileRunning++;
         // edit it on labels below:
         
-        tile.tileStats["totalTimeRunning"].Text = $"Total Time Running: {tile.tileRunning}";
-        if (Territories[tile.Name] != 0)
+        
+        if (Territories[tile.Name] != 0 && tile.activated)
         {
             //  changes the amounts  of the products that will be produced this day. including pounds
             foreach (var (resource, amount) in Produce)
@@ -106,6 +106,8 @@ public partial class constructionProject : Button
     public void OnClick()
     {
         Tile.selected = this;
+        GetTree().CallGroup("States", "OnSelect");
+        
         GD.Print($"{Name} has been clicked and selected");
     }
 }
