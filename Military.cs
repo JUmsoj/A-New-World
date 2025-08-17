@@ -29,6 +29,14 @@ public partial class Military : Area2D
             Move((@event as InputEventMouseButton).Position);
         }
     }
+    public void EnemyEngagement()
+    {
+        Timer attackTimer = new()
+        {
+            WaitTime = 5
+        };
+        Manager.instance.AddChild(attackTimer);
+    }
     private void Move(Vector2 position)
     {
         // also increase the amount of divisions of this type in there
@@ -43,5 +51,7 @@ public partial class Military : Area2D
 public partial class Tile : Button
 {
     public Dictionary<string, int> Divisions;
-    
+    public Dictionary<string, int> DivisionsInTraining;
+
+
 }

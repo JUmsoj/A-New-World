@@ -13,6 +13,7 @@ public partial class Tile : Button
     public static constructionProject selected;
     private Godot.Collections.Dictionary<string, int> TileResource, toBeBuilt, timeRemaining;
     [Export] private int maxBuildings;
+    
 
     [Export] public int Population { get; set; }
     private Godot.Collections.Dictionary<string, Label> tileStats;
@@ -38,10 +39,10 @@ public partial class Tile : Button
     public int tileRunning { get; set; }
 
     [Signal] public delegate void displayDataEventHandler(Tile tile);
-
+    
     public Godot.Collections.Dictionary<string, Variant> Save()
     {
-        return new Godot.Collections.Dictionary<string, Variant>
+        var dict = new Godot.Collections.Dictionary<string, Variant>
         {
             {" multiplier", multiplier },
             { "population", Population },
@@ -49,11 +50,26 @@ public partial class Tile : Button
             { "InQueue", toBeBuilt },
             { "Times",timeRemaining },
             { "Selected", TileResource },
-            { "identifier", "example"}
+            { "identifier", "example"},
+            { "X", GlobalPosition.X },
+            { "Y", GlobalPosition.Y },
+            {"sceneMode", sceneMode }
         };
+        return dict;
+    }
+    private Godot.Collections.Dictionary<string, Variant> GetAllConnections()
+    {
+        Godot.Collections.Dictionary<string, Variant> dict = [];
+        foreach(var signal in GetSignalList())
+        {
+            if (GetSignalConnectionList(signal["name"].As<string>()).Count != 0)
+            dict[(string)signal["name"]] = GetSignalConnectionList((string)signal["name"]);
+        }
+        return dict;
     }
     private int amountOfBuildings()
     {
+        
         int total = 0;
         foreach(var building in buildingsCurrentlyPresent)
         {
@@ -93,8 +109,8 @@ public partial class Tile : Button
         if (Project.Territories.TryGetValue(Name, out int _)) Project.Territories[Name]++;
         else Project.Territories[Name] = 1;
         if (checkIfAllConstructionsAreComplete()) Modulate = Colors.Black;
-        
-     
+        Update(toBeBuilt, buildingsCurrentlyPresent, selected);
+
     }
     void BuildForOneDay(string building)
     {
@@ -112,10 +128,20 @@ public partial class Tile : Button
         }
        
     }
+    private void Update(Godot.Collections.Dictionary<string, int> trackingVar, Godot.Collections.Dictionary<string, int> Present, constructionProject selected)
+    {
+        buildingCounter.Text = $"{selected.name} details: ({trackingVar[selected.name]}){(Present.TryGetValue(selected.name, out int val) ? buildingsCurrentlyPresent[selected.name] : val)}/{maxBuildings}";
+
+    }
+    private void Update(Godot.Collections.Dictionary<string, int> trackingVar, constructionProject selected)
+    {
+        buildingCounter.Text = trackingVar.TryGetValue(selected.name, out int _) ? $"{selected.name} details: {trackingVar[selected.name]}/{maxBuildings}" : $"0/{maxBuildings}";
+    }
     public void OnButtonPress(bool toggle)
     {
         EmitSignal(SignalName.displayData, this);
-        switch (sceneMode) 
+        GD.Print("Pressed");
+        switch (sceneMode)
         {
             case "economy":
                 
@@ -124,8 +150,13 @@ public partial class Tile : Button
                 {
                     if (!TileResource.TryGetValue(selected.name, out int _)) TileResource[selected.name] = 1;
                     else TileResource[selected.name]++;
-                    Modulate = Colors.Green;
-                    buildingCounter.Visible = true;
+                    Update(TileResource, buildingsCurrentlyPresent, selected);
+
+                    var newBox = GetThemeStylebox("normal").Duplicate() as StyleBoxFlat;
+                    newBox.BgColor = Colors.Green;
+                    AddThemeStyleboxOverride("normal", newBox);
+                    
+                    
                 }
                 else if (!(Resources.Base.GetParent() as Manager).bulldozingMode)
                 {
@@ -137,8 +168,29 @@ public partial class Tile : Button
                 }
                 break;
             case "war":
-                // add division movement code here
+                if (DivisionsInTraining.TryGetValue("Infantry", out int _)) DivisionsInTraining["Infantry"]++;
+                else DivisionsInTraining["Infantry"] = 1;
+                GD.Print("Training soldiers");
+                daytimer.Timeout += TrainOneDivision;
                 break;
+
+        }
+        
+    }
+    private void TrainOneDivision()
+    {
+        if (DivisionsInTraining["Infantry"] > 0) {
+            for (int i = 0; i < DivisionsInTraining["Infantry"]; i++)
+            {
+                if (Divisions.TryGetValue("Infantry", out int _)) Divisions["Infantry"]++;
+                else Divisions["Infantry"] = 1;
+                GD.Print($"Divisions in {Name}: {Divisions["Infantry"]}");
+            }
+
+        }
+        else
+        {
+            daytimer.Timeout -= TrainOneDivision;
         }
     }
     // use this for tile data that is displayed within a child of the Tile Node itself.
@@ -152,7 +204,7 @@ public partial class Tile : Button
             GD.Print("Found tileStats");
 
             // use this for stats that are located inside the Tile button itself
-                switch(child.Name)
+                /*switch(child.Name)
                 {
                     case "buildingAmount":
                         buildingCounter = child as Label;
@@ -160,46 +212,53 @@ public partial class Tile : Button
                         break;
                     
 
-                }
+                }*/
             
         }
     }
     void OnConfirm()
     {
-        if (TileResource.Count > 0 && activated)
-        {
-            // iterates through the types buildings currently selected to be built
-
-            foreach (var (building, num) in TileResource)
+        
+            if (TileResource.Count > 0 && activated)
             {
-                // the number of buildings to be built
-                for (int i = 0; i < num; i++)
+                // iterates through the types buildings currently selected to be built
+
+                foreach (var (building, num) in TileResource)
                 {
-                    if (Resources.Base.availableProjects[building].InvestResources() == 0 && amountOfBuildings() < maxBuildings)
+                    // the number of buildings to be built
+                    for (int i = 0; i < num; i++)
                     {
-                        GD.Print($"{selected.name} is confirmed as [one of] {Name}'s resource");
-                        
-                        if (!toBeBuilt.TryGetValue(building, out int _)) toBeBuilt[building] = 0;
-                        toBeBuilt[building]++;
+                        if (Resources.Base.availableProjects[building].InvestResources() == 0 && amountOfBuildings() < maxBuildings)
+                        {
+                            GD.Print($"{selected.name} is confirmed as [one of] {Name}'s resource");
 
-                        TileResource[building]--;
-                        Modulate = Colors.Red;
+                            if (!toBeBuilt.TryGetValue(building, out int _)) toBeBuilt[building] = 0;
+                            toBeBuilt[building]++;
 
-                        
+                            TileResource[building]--;
+
+                            AddThemeStyleboxOverride("hover", new StyleBoxFlat()
+                            {
+                                BgColor = Colors.Red
+                            });
+
+
+                        }
+                        else
+                        {
+                            GD.Print("Cannot build building, moving on");
+                            break;
+                        }
                     }
-                    else
-                    {
-                        GD.Print("Cannot build building, moving on");
-                        break;
-                    }
+                    // uses total time for all buildings to be completed as the time stored
+                    // in the dictionary.
+                    if (!timeRemaining.TryGetValue(building, out int _)) timeRemaining[building] = 0;
+                    timeRemaining[building] += Resources.Base.availableProjects[building].timeToProduce * num;
+                    daytimer.Timeout += () => BuildForOneDay(building);
                 }
-                // uses total time for all buildings to be completed as the time stored
-                // in the dictionary.
-                if (!timeRemaining.TryGetValue(building, out int _)) timeRemaining[building] = 0;
-                timeRemaining[building] += Resources.Base.availableProjects[building].timeToProduce * num;
-                daytimer.Timeout += () => BuildForOneDay(building);
             }
-        }
+        
+        
     }
     public override void _Process(double delta)
     {
@@ -223,14 +282,17 @@ public partial class Tile : Button
         // sets up statistics to be displayed when ShowSettings()
         // is called
         setUpStats();
-        
-        
+
+
         // tileStats["example"] = example;
 
         // GD.Print(tileStats["example"]);
-        
+
         // GD.Print(tileStats["population"].Text);
-        daytimer.Timeout += sellResources;
+
+        // daytimer.Timeout += sellResources;
+        DivisionsInTraining = [];
+        Divisions = [];
     }
     // displays the tile statistics by setting the Visible property of the TIleStats VBoxCOntainer
     // to true or false
@@ -241,13 +303,14 @@ public partial class Tile : Button
     }*/
     public void OnSelect()
     {
+
         buildingCounter.Visible = true;
         buildingCounter.Text = buildingsCurrentlyPresent.TryGetValue(selected.name, out int _) ? $"{buildingsCurrentlyPresent[selected.name]}/{maxBuildings}" : $"0/{maxBuildings}";
     }
     public void OnDeselect()
     {
-        buildingCounter.Visible = false;
-        GD.Print($"{buildingCounter}'s status is {buildingCounter.Visible}");
+        /*buildingCounter.Visible = false;
+        GD.Print($"{buildingCounter}'s status is {buildingCounter.Visible}");*/
     }
 
 }

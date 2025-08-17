@@ -1,0 +1,11 @@
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://dadur7nuxka6t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sii6b"]
+bg_color = Color(0.517184, 0.517184, 0.517184, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1y4r8"]
+bg_color = Color(0.267242, 0.683372, 0.58076, 1)
+
+[resource]
+Button/styles/hover = SubResource("StyleBoxFlat_sii6b")
+Button/styles/normal = SubResource("StyleBoxFlat_1y4r8")

@@ -60,6 +60,4 @@ layout_mode = 2
 [node name="Button13" parent="." instance=ExtResource("1_82epm")]
 layout_mode = 2
 
-[connection signal="toggled" from="Button" to="Button" method="OnButtonPress"]
-
 [editable path="Button"]

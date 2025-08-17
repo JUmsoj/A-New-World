@@ -70,11 +70,7 @@ public partial class Resources : Control
 
         Balance = 1000;
         balanceIndicator.Text = $"Balance: {Balance}";
-        var daysLabel = GetNode<Label>("DaysLabel");
-        (GetParent() as Manager).DayPassed += (int days) =>
-        {
-            daysLabel.Text = $"Current Day : {days}";
-        };
+        
         Base = this;
         root = GetPath();
         Production = [];

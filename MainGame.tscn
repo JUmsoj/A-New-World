@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://btby5o23c5uao"]
+[gd_scene load_steps=9 format=3 uid="uid://btby5o23c5uao"]
 
 [ext_resource type="Script" uid="uid://8hn7m3fyffqx" path="res://Manager.cs" id="1_3tbxw"]
 [ext_resource type="PackedScene" uid="uid://dcvr6atub00ea" path="res://Resources.tscn" id="2_e3m3f"]
 [ext_resource type="PackedScene" uid="uid://blevoqso01kp8" path="res://lands.tscn" id="3_8dnxm"]
 [ext_resource type="PackedScene" uid="uid://kgkh5flr7fjc" path="res://constructionProject.tscn" id="4_8qpgq"]
 [ext_resource type="PackedScene" uid="uid://bdbd4pf24fxmr" path="res://gun_label.tscn" id="4_pv6b4"]
+[ext_resource type="Theme" uid="uid://dadur7nuxka6t" path="res://tiles.tres" id="4_v3hs3"]
 [ext_resource type="Script" uid="uid://dm25443v8ub6q" path="res://Resource.cs" id="5_8qpgq"]
 [ext_resource type="Texture2D" uid="uid://c5h4igycy0def" path="res://Sprites/pixil-frame-0 (4).png" id="7_8dnxm"]
 
@@ -16,6 +17,7 @@ wait_time = 10.297
 autostart = true
 
 [node name="GameScene" parent="." node_paths=PackedStringArray("balanceIndicator") instance=ExtResource("2_e3m3f")]
+z_index = 1
 offset_left = 2.0
 offset_top = 0.0
 offset_right = 6.0
@@ -25,6 +27,8 @@ balanceIndicator = NodePath("balanceIndicator")
 [node name="Lands" parent="GameScene" instance=ExtResource("3_8dnxm")]
 layout_mode = 1
 offset_top = -374.0
+theme = ExtResource("4_v3hs3")
+columns = 1
 metadata/tilestats = {
 "population": NodePath("../../TileInfo/Test")
 }
@@ -135,11 +139,6 @@ text = "CONFIRM"
 script = ExtResource("5_8qpgq")
 metadata/res = "gun"
 
-[node name="DaysLabel" type="Label" parent="GameScene"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-
 [node name="balanceIndicator" type="Label" parent="GameScene"]
 layout_mode = 1
 anchors_preset = 1
@@ -190,6 +189,23 @@ offset_bottom = 644.0
 [node name="Test" type="Label" parent="TileInfo"]
 layout_mode = 2
 text = "Population: "
+
+[node name="BuildingInfo" type="Label" parent="TileInfo"]
+layout_mode = 2
+
+[node name="WarScene" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DaysLabel" type="Label" parent="."]
+offset_left = 2.0
+offset_right = 42.0
+offset_bottom = 23.0
 
 [connection signal="displayData" from="GameScene/Lands/Button" to="." method="fillInData"]
 [connection signal="pressed" from="GameScene/ProjectTypes/GunFactory2" to="GameScene/ProjectTypes/GunFactory2" method="OnClick"]
