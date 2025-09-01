@@ -7,17 +7,42 @@ using System.Collections.Generic;
 public partial class Resources : Control
 {
     public static Resources Base;
-    
+    public bool stillGoing { get; set; } = false;
+    private Vector2 lineOrigin, lineEnding;
     [Export] public int Balance { get; set; }
     [Export] public Label balanceIndicator;
     public Godot.Collections.Dictionary<string, Resource> Production;
     public static string root;
+   
     public Godot.Collections.Dictionary<string, constructionProject> availableProjects { get; set; }
     /// <summary>
     /// subtracts or simulates the subtraction from the balance by the amount  specified in the amount paramater, and returns true or false depending on if 
     /// you can afford the loss (does it go negative when you subtract it). However, if purchaseAuto is false, it doesn't actually subtract.
     /// </summary>
-
+    public override void _GuiInput(InputEvent @event)
+    {
+        if(@event is InputEventMouseMotion eventmotion)
+        {
+            lineEnding = eventmotion.Position;
+        }
+        else if(@event is InputEventMouseButton eventbutton)
+        {
+            if(!stillGoing && eventbutton.Pressed)
+            {
+                GD.Print($"hello sarr");
+                stillGoing = true;
+                lineOrigin = eventbutton.Position;
+            }
+            else if(stillGoing && !eventbutton.Pressed)
+            {
+                stillGoing = false;
+            }
+        }
+    }
+    public override void _Process(double delta)
+    {
+        QueueRedraw();
+    }
     public static IEnumerable findTypeInList<T>(List<object> list)
     {
         foreach(var item in list)
@@ -64,6 +89,12 @@ public partial class Resources : Control
         // GD.Print("Returned Null");
 
         return null;
+    }
+    public override void _Draw()
+    {
+        if (stillGoing) {
+            DrawLine(lineOrigin, lineEnding, Colors.Black);
+        }
     }
     public override void _Ready()
     {

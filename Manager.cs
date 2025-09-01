@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public enum TypesOfSaves
 {
@@ -8,23 +9,58 @@ public enum TypesOfSaves
 }
 public partial class Manager : Node
 {
-    private int days;
+    [Export] public Godot.Collections.Dictionary<string, Godot.Collections.Dictionary<string, int>> DivisionCosts;
+    [Export] Godot.Collections.Dictionary<string, int> popNeeds;
+    public int days { get; set; }
     private Godot.Collections.Dictionary<string, Variant> tileSaveDict ;
     [Signal] 
     public delegate void DayPassedEventHandler(int days);
     public static Node manager;
+    // Each unit will choose a unit name from the namelist **if** it's not taken already.
+    [Export] public Godot.Collections.Array<string> nameList;
     public Control SelectedInterface { get; set; }
-    private VBoxContainer TileInformation;
+    private VBoxContainer TileInformation, SelectedInformation;
     public Godot.Collections.Dictionary<string, Label> Labels { get; set; }
     public bool bulldozingMode { get; set; }
     private bool toggle = false;
     public static Manager instance;
+  
     
     // Assigns a callback to the Timeout signal, whcihc tracks the current day in the game
+    public bool isJustPressed(InputEvent Event, MouseButton intendedButton, out InputEventMouseButton inputEventMouseButton)
+    {
+        if(Event is InputEventMouseButton button)
+        {
+            inputEventMouseButton = button;
+            if(button.ButtonIndex == intendedButton && button.Pressed)
+            {
+                return true;
+            }
+        }
+        inputEventMouseButton = null;
+        return false;
+    }
+    public bool isJustPressed(InputEvent Event, Key intendedButton, out InputEventKey inputEventMouseButton)
+    {
+        if (Event is InputEventKey key)
+        {
+            inputEventMouseButton = key;
+            if (key.Keycode == intendedButton && key.Pressed)
+            {
+               
+                return true;
+            }
+        }
+        inputEventMouseButton = null;
+        return false;
+    }
     public override void _Ready()
     {
         instance = this;
-
+        foreach(var node in GetTree().GetNodesInGroup("States"))
+        {
+            DayPassed += ((Tile)node).RandomRebellion;
+        }
         GetNode<Timer>("DayTimer").Timeout += () =>
         {
             days++;
@@ -39,16 +75,32 @@ public partial class Manager : Node
         // sets the labels that display the selected Tile's statistics
         // (population, buildings, etc)
         TileInformation = GetNode<VBoxContainer>("TileInfo");
+        SelectedInformation = GetNode<VBoxContainer>("SelectedStats");
         SelectedInterface = GetNode<Control>("GameScene");
         GetTree().SetGroup("States", "sceneMode", "economy");
+
         Labels = new Godot.Collections.Dictionary<string, Label> {
+            // Tile Statistics
             { "Pop", TileInformation.GetNode<Label>("Test") },
-             { "BuildingInfo", TileInformation.GetNode<Label>("BuildingInfo")}
+            { "BuildingInfo", TileInformation.GetNode<Label>("BuildingInfo")},
+            { "Units", TileInformation.GetNode<Label>("Units")},
+            // constructionProject statistics
+            { "1",  SelectedInformation.GetNode<Label>("1")},
+            { "2", SelectedInformation.GetNode<Label>("2") }
+        };
+        DivisionCosts = new()
+        {
+            {"Infantry", new()
+                {
+                    {"gun", 20}
+                } 
+            }
         };
         GetTree().SetGroup("States", "buildingCounter", Labels["BuildingInfo"]);
 
 
     }
+    
     public override void _UnhandledKeyInput(InputEvent @event)
     {
         if(@event is InputEventKey keyEvent)
@@ -61,9 +113,35 @@ public partial class Manager : Node
     }
     public void fillInData(Tile tile)
     {
+        string sceneMode = (GetTree().GetFirstNodeInGroup("States") as Tile).sceneMode;
+        switch(sceneMode) {
+            case "economy":
+                Labels["Pop"].Text = $"Population: {tile.Population}";
+                break;
+            case "war":
+                Labels["Units"].Text = $"Infantry: {(tile.Divisions.TryGetValue("Infantry", out var value) ? value : 0)}";
+                break;
+        }
         
-        Labels["Pop"].Text = $"Population: {tile.Population}";
-        
+    }
+    
+    public void fillInData(constructionProject project)
+    {
+        Labels["1"].Text = "Cost:";
+        Labels["2"].Text = "Produces:";
+        foreach(var (good, amt) in project.Cost)
+        {
+            
+            Labels["1"].Text += $"{good} : {amt}";
+        }
+        foreach(var (good, amt) in project.Produce)
+        {
+            Labels["2"].Text += $"{good} : {amt}";
+        }
+    }
+    public void SetType(string type)
+    {
+        Military.SelectedDivisionType = type;
     }
     // saves all the data within a group's collective "Save" method.
     public void SaveData(string group, params Variant[] varsToSaveBinarily)
@@ -113,6 +191,18 @@ public partial class Manager : Node
             binaryFile.Close();
         }
 
+    }
+    private void OpenMap()
+    {
+        AnimatedSprite2D map = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+        map.PlayBackwards("default");
+        while(map.IsPlaying())
+        {
+            if(map.Frame == 22)
+            {
+                map.Stop();
+            }
+        }
     }
     public void SaveData(Godot.Collections.Dictionary<string, Variant> data)
     {
@@ -177,18 +267,20 @@ public partial class Manager : Node
 
                    
                         var strVal = (string)value;
-                        GD.Print("FOUBN");
+                        // GD.Print("FOUBN");
                         switch (strVal)
                         {
                             case "example":
                                 GD.Print("What");
                                  PackedScene tile = GD.Load<PackedScene>("res://Square.tscn");
+                                        
                                     var newTile = tile.Instantiate<Tile>();
+                                    newTile.Name = Data["name"].As<string>();
                                     newTile.Position = new Vector2((float)Data["X"], (float)Data["Y"]);
                                      newTile.AddToGroup("States");
                                     foreach(var (Key, val) in Data)
                                     {
-                                        if (Key == "X" || Key == "Y") continue;
+                                        if (Key == "X" || Key == "Y" || Key == "name") continue;
                                         else  newTile.Set(Key, val);
                                         
                                     }
@@ -239,12 +331,19 @@ public partial class Manager : Node
         }
     }
     // sets the interface depending on a signal string argument
+    public void openGame()
+    {
+        GetTree().SetGroup("States", Tile.PropertyName.sceneMode, "economy");
+        setInterface("economy");
+        
+    }
     public void setInterface(string selectedInterface)
     {
         SelectedInterface.Visible = false;
         switch (selectedInterface)
         {
             case "war":
+
                 Control Interface = GetNode<Control>("WarScene");
                 Interface.Visible = true;
                 SelectedInterface = Interface;
@@ -259,6 +358,8 @@ public partial class Manager : Node
                 AltInterface1.Visible = true;
                 SelectedInterface = AltInterface1;
                 GetTree().SetGroup("States", "sceneMode", "economy");
+                SaveData("States");
+                SingleLoadGame("States");
                 break;
 
         }
@@ -267,5 +368,12 @@ public partial class Manager : Node
     {
         manager = this;
       
+    }
+    public void ChangeSupplyBulk(Dictionary<string, int> dict)
+    {
+        foreach(var (good, amt) in dict)
+        {
+            GetNode<Resources>("GameScene").Production[good].ChangeSupply(ResourceActions.Spend, amt);
+        }
     }
 }

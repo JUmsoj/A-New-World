@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://btby5o23c5uao"]
+[gd_scene load_steps=33 format=3 uid="uid://btby5o23c5uao"]
 
 [ext_resource type="Script" uid="uid://8hn7m3fyffqx" path="res://Manager.cs" id="1_3tbxw"]
 [ext_resource type="PackedScene" uid="uid://dcvr6atub00ea" path="res://Resources.tscn" id="2_e3m3f"]
@@ -8,6 +8,111 @@
 [ext_resource type="Theme" uid="uid://dadur7nuxka6t" path="res://tiles.tres" id="4_v3hs3"]
 [ext_resource type="Script" uid="uid://dm25443v8ub6q" path="res://Resource.cs" id="5_8qpgq"]
 [ext_resource type="Texture2D" uid="uid://c5h4igycy0def" path="res://Sprites/pixil-frame-0 (4).png" id="7_8dnxm"]
+[ext_resource type="Texture2D" uid="uid://dm0fcovjjayh0" path="res://Sprites/mapframes/pixil-frame-0.png" id="9_6jgly"]
+[ext_resource type="Texture2D" uid="uid://h45d3cvqtp1e" path="res://Sprites/mapframes/pixil-frame-1.png" id="10_y1hsh"]
+[ext_resource type="Texture2D" uid="uid://cufqqrpwqwmw1" path="res://Sprites/mapframes/pixil-frame-2.png" id="11_ql8k3"]
+[ext_resource type="Texture2D" uid="uid://dfr6iqw73fd5j" path="res://Sprites/mapframes/pixil-frame-3.png" id="12_5b81d"]
+[ext_resource type="Texture2D" uid="uid://djyskha4n28um" path="res://Sprites/mapframes/pixil-frame-4.png" id="13_8kysg"]
+[ext_resource type="Texture2D" uid="uid://bqo3q24duohx7" path="res://Sprites/mapframes/pixil-frame-5.png" id="14_n03md"]
+[ext_resource type="Texture2D" uid="uid://ca8s2sd7h0san" path="res://Sprites/mapframes/pixil-frame-6.png" id="15_uhubb"]
+[ext_resource type="Texture2D" uid="uid://t42fvqnsg4m6" path="res://Sprites/mapframes/pixil-frame-7.png" id="16_uc6q1"]
+[ext_resource type="Texture2D" uid="uid://ctipcfp7j0u5x" path="res://Sprites/mapframes/pixil-frame-8.png" id="17_vygm6"]
+[ext_resource type="Texture2D" uid="uid://xgjbn1c87ont" path="res://Sprites/mapframes/pixil-frame-9.png" id="18_2e153"]
+[ext_resource type="Texture2D" uid="uid://dkm8sya387g8n" path="res://Sprites/mapframes/pixil-frame-10.png" id="19_cdkxt"]
+[ext_resource type="Texture2D" uid="uid://dcwnvi3ymqc4y" path="res://Sprites/mapframes/pixil-frame-11.png" id="20_k1sw4"]
+[ext_resource type="Texture2D" uid="uid://b28d761gwei3a" path="res://Sprites/mapframes/pixil-frame-12.png" id="21_6rkns"]
+[ext_resource type="Texture2D" uid="uid://cxe3y1c6kxen6" path="res://Sprites/mapframes/pixil-frame-13.png" id="22_jbja5"]
+[ext_resource type="Texture2D" uid="uid://doisgvc0u3mbm" path="res://Sprites/mapframes/pixil-frame-14.png" id="23_xvovi"]
+[ext_resource type="Texture2D" uid="uid://cpgk6lu4cl38e" path="res://Sprites/mapframes/pixil-frame-15.png" id="24_vjpaa"]
+[ext_resource type="Texture2D" uid="uid://8eodak0xhqyo" path="res://Sprites/mapframes/pixil-frame-16.png" id="25_jyxgm"]
+[ext_resource type="Texture2D" uid="uid://cd0bmuyfrhasb" path="res://Sprites/mapframes/pixil-frame-17.png" id="26_6ylhg"]
+[ext_resource type="Texture2D" uid="uid://cx76akdr4be2a" path="res://Sprites/mapframes/pixil-frame-18.png" id="27_np7ck"]
+[ext_resource type="Texture2D" uid="uid://bor3pvet72mxu" path="res://Sprites/mapframes/pixil-frame-19.png" id="28_xjiif"]
+[ext_resource type="Texture2D" uid="uid://cjhnr17thya2r" path="res://Sprites/mapframes/pixil-frame-20.png" id="29_sqnmr"]
+[ext_resource type="Texture2D" uid="uid://spuafyo81ml8" path="res://Sprites/mapframes/pixil-frame-21.png" id="30_2i8fe"]
+[ext_resource type="Texture2D" uid="uid://c6y5wnjn6kqcy" path="res://Sprites/mapframes/pixil-frame-22.png" id="31_4ka7t"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nf3jg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_6jgly")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_y1hsh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_ql8k3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_5b81d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_8kysg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_n03md")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_uhubb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_uc6q1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_vygm6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_2e153")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_cdkxt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_k1sw4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_6rkns")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_jbja5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_xvovi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_vjpaa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_jyxgm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_6ylhg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_np7ck")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_xjiif")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_sqnmr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_2i8fe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_4ka7t")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"new_animation",
+"speed": 5.0
+}]
 
 [node name="Node" type="Node"]
 script = ExtResource("1_3tbxw")
@@ -26,7 +131,10 @@ balanceIndicator = NodePath("balanceIndicator")
 
 [node name="Lands" parent="GameScene" instance=ExtResource("3_8dnxm")]
 layout_mode = 1
-offset_top = -374.0
+offset_left = -175.0
+offset_top = -647.0
+offset_right = -24.0
+offset_bottom = 51.0
 theme = ExtResource("4_v3hs3")
 columns = 1
 metadata/tilestats = {
@@ -75,10 +183,10 @@ daytimer = NodePath("../../../DayTimer")
 [node name="Labels" type="VBoxContainer" parent="GameScene"]
 layout_direction = 2
 layout_mode = 0
-offset_left = -3.0
-offset_top = 92.0
-offset_right = 210.0
-offset_bottom = 385.0
+offset_left = -2.0
+offset_top = 110.0
+offset_right = 211.0
+offset_bottom = 403.0
 
 [node name="GunLabel" parent="GameScene/Labels" instance=ExtResource("4_pv6b4")]
 layout_mode = 2
@@ -144,7 +252,7 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -145.0
+offset_left = -125.0
 offset_bottom = 60.0
 grow_horizontal = 0
 
@@ -174,10 +282,10 @@ offset_bottom = 13.0
 text = "TEST SAVE"
 
 [node name="Button2" type="Button" parent="."]
-offset_left = 105.0
-offset_top = 2.0
-offset_right = 192.0
-offset_bottom = 33.0
+offset_left = 108.0
+offset_top = 1.0
+offset_right = 200.0
+offset_bottom = 32.0
 text = "TEST LOAD"
 
 [node name="TileInfo" type="VBoxContainer" parent="."]
@@ -193,7 +301,38 @@ text = "Population: "
 [node name="BuildingInfo" type="Label" parent="TileInfo"]
 layout_mode = 2
 
+[node name="Units" type="Label" parent="TileInfo"]
+layout_mode = 2
+
 [node name="WarScene" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 20.0
+offset_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InfantryButton" type="Button" parent="WarScene"]
+layout_mode = 0
+offset_top = 67.0
+offset_right = 135.0
+offset_bottom = 82.0
+text = "INFANTRY"
+
+[node name="DaysLabel" type="Label" parent="."]
+offset_left = 2.0
+offset_right = 42.0
+offset_bottom = 23.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(566, 273)
+scale = Vector2(4.05, 3.62)
+sprite_frames = SubResource("SpriteFrames_nf3jg")
+
+[node name="MainMenu" type="Control" parent="."]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -202,16 +341,41 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="DaysLabel" type="Label" parent="."]
-offset_left = 2.0
-offset_right = 42.0
-offset_bottom = 23.0
+[node name="PlayButton" type="Button" parent="MainMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 116.0
+offset_bottom = 36.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SelectedStats" type="VBoxContainer" parent="."]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = 63.0
+offset_right = 213.0
+offset_bottom = 149.0
+grow_vertical = 2
+
+[node name="1" type="Label" parent="SelectedStats"]
+layout_mode = 2
+
+[node name="2" type="Label" parent="SelectedStats"]
+layout_mode = 2
 
 [connection signal="displayData" from="GameScene/Lands/Button" to="." method="fillInData"]
 [connection signal="pressed" from="GameScene/ProjectTypes/GunFactory2" to="GameScene/ProjectTypes/GunFactory2" method="OnClick"]
 [connection signal="pressed" from="GameScene/Confirm" to="GameScene" method="OnConfirm"]
 [connection signal="pressed" from="VBoxContainer/warButton" to="." method="setInterface" binds= ["war"]]
 [connection signal="pressed" from="VBoxContainer/economyButton" to="." method="setInterface" binds= ["construct"]]
+[connection signal="button_down" from="WarScene/InfantryButton" to="." method="SetType" binds= ["Infantry"]]
 
 [editable path="GameScene/Lands"]
 [editable path="GameScene/Lands/Button"]

@@ -12,35 +12,48 @@ public partial class constructionProject : Button
     [Export] public Dictionary<string, int> Cost, Produce;
     [Export] public int timeToProduce;
     public Dictionary<string, int> Territories { get; set; }
-    
 
-   
+
+
     // simulates one operating day of a given facility that follows this blueprint
     // will update the stats accordingly
+    public override void _GuiInput(InputEvent @event)
+    {
+        if(@event is InputEventMouseButton eventmousebutton)
+        {
+            if(eventmousebutton.ButtonIndex == MouseButton.Right && eventmousebutton.Pressed)
+            {
+                Manager.instance.fillInData(this);
+            }
+        }
+    }
     public void Operate(Tile tile)
     {
-        // update tileStats variables below:
-        tile.tileRunning++;
-        // edit it on labels below:
-        
-        
-        if (Territories[tile.Name] != 0 && tile.activated)
+        if (tile != null)
         {
-            //  changes the amounts  of the products that will be produced this day. including pounds
-            foreach (var (resource, amount) in Produce)
+            // update tileStats variables below:
+            tile.tileRunning++;
+            // edit it on labels below:
+
+
+            if (Territories[tile.Name] != 0 && tile.activated)
             {
-                int newAmount = tile.multiplier != 0 ? tile.multiplier * amount : amount;
-                // if it isnt pounds use the regular Produce() function that uses
-                // the dictionary Production to get the Resources and Labels
-                if (resource != "balance")
+                //  changes the amounts  of the products that will be produced this day. including pounds
+                foreach (var (resource, amount) in Produce)
                 {
-                    Resources.Base.Production[resource].Produce(newAmount);
-                    GD.Print($"A tile of {tile.Name} has succesfully fufilled resource expectations for the day");
-                }
-                // uniquely handles pounds with the SpendPounds function
-                else
-                {
-                    Resources.Base.SpendPounds(-newAmount);
+                    int newAmount = tile.multiplier != 0 ? tile.multiplier * amount : amount;
+                    // if it isnt pounds use the regular Produce() function that uses
+                    // the dictionary Production to get the Resources and Labels
+                    if (resource != "balance")
+                    {
+                        Resources.Base.Production[resource].Produce(newAmount);
+                        GD.Print($"A tile of {tile.Name} has succesfully fufilled resource expectations for the day");
+                    }
+                    // uniquely handles pounds with the SpendPounds function
+                    else
+                    {
+                        Resources.Base.SpendPounds(-newAmount);
+                    }
                 }
             }
         }
@@ -107,7 +120,7 @@ public partial class constructionProject : Button
     {
         Tile.selected = this;
         GetTree().CallGroup("States", "OnSelect");
-        
+        Manager.instance.fillInData(this);
         GD.Print($"{Name} has been clicked and selected");
     }
 }

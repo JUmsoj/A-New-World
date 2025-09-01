@@ -59,15 +59,16 @@ public partial class Resource : Node
 	{
 		this.amount += amount;
 		GD.Print($"Changed the amount of {type} by {amount}");
-		label.Text = $"{type}: {amount}";
+		label.Text = $"{type}: {this.amount}";
 
 	}
 	/// <summary>
 	/// Changes the Supply of the corresponding Resource with an Action (add, subtract), and an amount
 	/// </summary>
 	
-	public void ChangeSupply(ResourceActions action, int amount)
+	public bool ChangeSupply(ResourceActions action, int amount)
 	{
+		
 		switch(action)
 		{
 			case ResourceActions.Produce:
@@ -76,8 +77,11 @@ public partial class Resource : Node
 			case ResourceActions.Spend:
 				this.amount -= amount;
 				break;
-			
-		}
-	}
+
+                
+        }
+        label.Text = $"{type}: {this.amount}";
+        return this.amount > amount;
+    }
 	
 }

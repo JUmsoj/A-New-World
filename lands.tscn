@@ -16,7 +16,6 @@ columns = 2
 
 [node name="Button" parent="." groups=["States"] instance=ExtResource("1_82epm")]
 layout_mode = 2
-toggle_mode = true
 maxBuildings = 5
 Population = 100
 activated = true
