@@ -10,16 +10,18 @@ public enum TypesOfSaves
 public partial class Manager : Node
 {
     [Export] public Godot.Collections.Dictionary<string, Godot.Collections.Dictionary<string, int>> DivisionCosts;
-    [Export] Godot.Collections.Dictionary<string, int> popNeeds;
+    [Export] public Godot.Collections.Dictionary<string, int> popNeeds;
     public int days { get; set; }
     private Godot.Collections.Dictionary<string, Variant> tileSaveDict ;
     [Signal] 
     public delegate void DayPassedEventHandler(int days);
     public static Node manager;
+    
     // Each unit will choose a unit name from the namelist **if** it's not taken already.
     [Export] public Godot.Collections.Array<string> nameList;
     public Control SelectedInterface { get; set; }
     private VBoxContainer TileInformation, SelectedInformation;
+    public int ConstructionModifier { get; set; }
     public Godot.Collections.Dictionary<string, Label> Labels { get; set; }
     public bool bulldozingMode { get; set; }
     private bool toggle = false;
@@ -56,10 +58,30 @@ public partial class Manager : Node
     }
     public override void _Ready()
     {
+        popNeeds = new() {
+            { "gun", 50 }
+        };  
         instance = this;
         foreach(var node in GetTree().GetNodesInGroup("States"))
         {
-            DayPassed += ((Tile)node).RandomRebellion;
+            Tile tile = node as Tile;
+            DayPassed += tile.RandomRebellion;
+            DayPassed += (days) =>
+            {
+                if (days % 7 == 0)
+                {
+                    tile.sellResources();
+                }
+            };
+            DayPassed += days =>
+            {
+                if (days % 7 == 0 && Resources.Base.SpendPounds(50))
+                {
+                    (node as Tile).ExtractResources();
+                    
+                }
+            };
+
         }
         GetNode<Timer>("DayTimer").Timeout += () =>
         {
@@ -84,6 +106,7 @@ public partial class Manager : Node
             { "Pop", TileInformation.GetNode<Label>("Test") },
             { "BuildingInfo", TileInformation.GetNode<Label>("BuildingInfo")},
             { "Units", TileInformation.GetNode<Label>("Units")},
+            { "QualityOfLife", TileInformation.GetNode<Label>("QualityOfLife") },
             // constructionProject statistics
             { "1",  SelectedInformation.GetNode<Label>("1")},
             { "2", SelectedInformation.GetNode<Label>("2") }
@@ -117,6 +140,8 @@ public partial class Manager : Node
         switch(sceneMode) {
             case "economy":
                 Labels["Pop"].Text = $"Population: {tile.Population}";
+                Labels["QualityOfLife"].Text = $"Quality Of Life: {tile.qualityOfLife}";
+
                 break;
             case "war":
                 Labels["Units"].Text = $"Infantry: {(tile.Divisions.TryGetValue("Infantry", out var value) ? value : 0)}";
@@ -371,7 +396,7 @@ public partial class Manager : Node
     }
     public void ChangeSupplyBulk(Dictionary<string, int> dict)
     {
-        foreach(var (good, amt) in dict)
+        foreach (var (good, amt) in dict)
         {
             GetNode<Resources>("GameScene").Production[good].ChangeSupply(ResourceActions.Spend, amt);
         }

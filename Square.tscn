@@ -14,6 +14,7 @@ theme = SubResource("Theme_y4sij")
 toggle_mode = true
 script = ExtResource("1_y4sij")
 maxBuildings = 6
+Population = 50
 
 [node name="tileStats" type="VBoxContainer" parent="."]
 layout_mode = 0

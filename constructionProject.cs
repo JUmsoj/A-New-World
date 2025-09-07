@@ -5,6 +5,9 @@ using System.Reflection.Metadata.Ecma335;
 // Resources cannot be produced directly, a blueprint for a 
 // facility that produces said resource must be built
 // the class for it is defined below
+
+// naming convention is (main resource produced)Factory
+// e.g gunFactory, logFactory, foodFactory (not farms), etc
 public partial class constructionProject : Button
 {
     

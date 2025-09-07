@@ -12,6 +12,7 @@ public partial class Military : Control
 	private Label defenceIndicator, attackIndicator;
 	public static Vector2 lineOrigin, lineEnding;
 	public static bool lineExists = false;
+	[Export] public Label tileInLBL { get; set; }
 	public string Type { get; set; }
 	public Tile tileExistsIn { get; set; }
 	
@@ -68,6 +69,7 @@ public partial class Military : Control
     {
 		GD.Print($"Position of {Name}: {Position}");
 		GD.Print($"{Name} has been deployed for duty");
+		tileInLBL.Text = $"Tile: {tileExistsIn.Name}";
     }
 	public override void _Process(double delta)
 	{
@@ -78,6 +80,15 @@ public partial class Tile : Button
 {
 	public Dictionary<string, int> Divisions;
 	public Dictionary<string, int> DivisionsInTraining;
-
-
+	private bool mouseIn = false;
+    public override void _Notification(int what)
+    {
+        if(what == NotificationMouseEnter && Military.lineExists && ButtonPressed)
+		{
+			var Division = Military.SelectedDivision;
+			Division.tileExistsIn.Move(Division.Type, this);
+			Military.lineExists = false;
+		}
+    }
+	 
 }

@@ -9,7 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 public partial class Tile : Button
 {
 
-    
+    [Export] public int qualityOfLife { get; set; }
     public string sceneMode;
     private Resources resources;
     public int TotalBalance;
@@ -31,6 +31,7 @@ public partial class Tile : Button
     private bool confirmed = false;
     private int timeToEstablish = 1;
     private bool isSettingsShown = false;
+    [Export] Godot.Collections.Dictionary<string, int> NaturalResources;
     /*private readonly Label example = new Label()
     {
         Text = "Hello",
@@ -76,23 +77,13 @@ public partial class Tile : Button
             
         }
     }
-    public override void _UnhandledKeyInput(InputEvent @event)
-    {
-        if(@event is InputEventKey eventkey)
-        {
-            if(eventkey.Keycode == Key.Up && eventkey.Pressed)
-            {
-                Divisions["Infantry"]--;
-                Move("Infantry", (GetParent().GetChild(GetIndex() + 1) as Tile));
-            }
-        }
-    }
+   
     public void Move(string type, Tile destination)
     {
         int timeToMove = 5;
         int day = Manager.instance.days;
         Divisions[type]--;
-        
+        GD.Print($"One division of type {type} is moving from {this.Name} to {destination.Name}");
         Manager.instance.DayPassed += (int days) =>
         {
             if(days == day + timeToMove)
@@ -146,7 +137,7 @@ public partial class Tile : Button
 
        
         bool result;
-        var rng = new Godot.RandomNumberGenerator();
+        var rng = new RandomNumberGenerator();
         int num = rng.RandiRange(0, 10);
         if(num < 5)
         {
@@ -162,9 +153,10 @@ public partial class Tile : Button
         }
         if (result && Divisions["Infantry"] > 0) Divisions["Infantry"]--;
 
-        else
+        else if(activated)
         {
             Population -= 50;
+            activated = false;
             return;
         }
     }
@@ -178,25 +170,46 @@ public partial class Tile : Button
         }
         return total;
     }
-    private void sellResources()
+    public void sellResources()
     {
-        for (int i = 100; i < Population; i += 100)
+        if (activated)
         {
-            if (Resources.Base.Production["gun"].amount < 50) Population -= 50;
-            else Resources.Base.Production["gun"].amount += 50;
-        }
-        if (Population <= 0)
-        {
-            activated = false;
-            GD.Print($"{Name} is now deactivated");
-        }
-        else
-        {
-            if (!activated)
+            for (int i = 100; i < Population; i += 100)
             {
-                activated = true;
+                foreach (var (need, amount) in Manager.instance.popNeeds)
+                {
+                    if (Resources.Base.Production[need].amount < amount)
+                    {
+                        qualityOfLife -= 10;
+                        break;
+
+                    }
+                    else if (Resources.Base.Production[need].amount - amount > 100)
+                    {
+                        qualityOfLife++;
+                    }
+                    Resources.Base.Production[need].ChangeSupply(ResourceActions.Spend, 50);
+                }
+            }
+            if (qualityOfLife <= 0)
+            {
+                Population -= 10;
+            }
+            if (Population <= 0)
+            {
+                activated = false;
                 GD.Print($"{Name} is now deactivated");
             }
+
+            else
+            {
+                if (!activated)
+                {
+                    activated = true;
+                    GD.Print($"{Name} is now deactivated");
+                }
+            }
+            Manager.instance.fillInData(this);
         }
     }
     private bool checkIfAllConstructionsAreComplete()
@@ -229,21 +242,20 @@ public partial class Tile : Button
     void BuildForOneDay(string building)
     {
 
-        if (toBeBuilt.ContainsKey(building))
-        {
-            if (toBeBuilt[building] != 0)
+        
+            if (toBeBuilt.TryGetValue(building, out int val) && val >= 0)
             {
                 timeRemaining[building]--;
 
                 GD.Print($"{Name} has been built for one day");
-                if (timeRemaining[building] % Resources.Base.availableProjects[building].timeToProduce == 0 && timeRemaining[building] >= 0)
+                if (timeRemaining[building] % Resources.Base.availableProjects[building].timeToProduce == 0)
                 {
                     Establish(Resources.Base.availableProjects[building]);
                 }
             }
 
 
-        }
+        
     }
     private void Update(Godot.Collections.Dictionary<string, int> trackingVar, Godot.Collections.Dictionary<string, int> Present, constructionProject selected)
     {
@@ -288,7 +300,6 @@ public partial class Tile : Button
                 var div = Military.SelectedDivisionType;
                 foreach (var (good, cost) in Manager.instance.DivisionCosts[div])
                 {
-
                     if (cost > Resources.Base.Production[good].amount)
                     {
                         return;
@@ -305,14 +316,14 @@ public partial class Tile : Button
                 if (DivisionsInTraining.TryGetValue(div, out int _)) DivisionsInTraining[div]++;
                 else DivisionsInTraining[div] = 1;
                 PackedScene div_tangible = GD.Load<PackedScene>("res://Unit.tscn");
-                var division = div_tangible.Instantiate();
-                var divse = (Military)division;
-                ((Military)division).tileExistsIn = this;
-                divse.Position = new Vector2(196, 200);
-                divse.MoveToFront();
+                var division = div_tangible.Instantiate<Military>();
+                
+                division.tileExistsIn = this;
+                division.Position = new Vector2(196, 200);
+                division.MoveToFront();
                 division.Name = "hi";
-                divse.Visible = true;
-                divse.Type = div;
+                division.Visible = true;
+                division.Type = div;
                 FindParent("WarScene").AddChild(division);
                 
                 GD.Print("Training soldiers");
@@ -437,13 +448,19 @@ public partial class Tile : Button
        
     public void RandomRebellion(int days)
     {
-        Manager.instance.DayPassed += days =>
-        {
+        
             if (days % 5 == 0)
             {
                 NativeRebellion();
             }
-        };
+        
+    }
+    public void ExtractResources()
+    {
+        foreach(var ( resource, amount) in NaturalResources)
+        {
+            Resources.Base.Production[resource].ChangeSupply(ResourceActions.Produce, amount);
+        }
     }
     public override void _Ready()
     {
@@ -451,7 +468,7 @@ public partial class Tile : Button
         // sets up Tile collections
         buildingsCurrentlyPresent = [];
         toBeBuilt = [];
-        toBeBuilt["gunFactory"] = 0;
+        
         timeRemaining = [];
         //displayData += Manager.instance.fillInData;
         TileResource = [];
@@ -459,7 +476,7 @@ public partial class Tile : Button
         // sets up statistics to be displayed when ShowSettings()
         // is called
         setUpStats();
-
+        
 
         // tileStats["example"] = example;
 

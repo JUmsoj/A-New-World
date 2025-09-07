@@ -304,6 +304,9 @@ layout_mode = 2
 [node name="Units" type="Label" parent="TileInfo"]
 layout_mode = 2
 
+[node name="QualityOfLife" type="Label" parent="TileInfo"]
+layout_mode = 2
+
 [node name="WarScene" type="Control" parent="."]
 visible = false
 layout_mode = 3
